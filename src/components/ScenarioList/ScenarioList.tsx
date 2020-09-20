@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Button, makeStyles, Icon } from '@material-ui/core'
 import ScenarioCard from '../ScenarioCard/ScenarioCard'
+import { Scenario } from '../../model/scenario'
 
 const useStyle = makeStyles({
   button: {
@@ -9,18 +10,28 @@ const useStyle = makeStyles({
   }
 })
 
-export default function ScenarioList() {
+interface Props {
+  scenarioList: Scenario[]
+  onGetScenarioList: () => void
+}
+
+export default function ScenarioList(props: Props) {
+  const { scenarioList, onGetScenarioList } = props
   const classes = useStyle()
 
-  const onButtonClick = useCallback(
-    () => {
-    }, [])
+  useEffect(() => {
+    onGetScenarioList()
+  }, [onGetScenarioList])
+
+  const onButtonClick = useCallback(() => {
+    onGetScenarioList()
+  }, [onGetScenarioList])
 
   return <>
       <Button className={classes.button} variant="outlined" onClick={onButtonClick}>
         <Icon>refresh</Icon>
         update
       </Button>
-      <ScenarioCard></ScenarioCard>
+      {scenarioList.map(scenario => <ScenarioCard scenario={scenario}/>)}
   </>
 }

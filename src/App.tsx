@@ -1,9 +1,9 @@
 import React from 'react'
-import ScenarioList from './components/ScenarioList/ScenarioList'
+import ScenarioContainer from './containers/ScenarioContainer/ScenarioContainer'
 
 const App: React.FC = () => {
   return (
-    <ScenarioList></ScenarioList>
+    <ScenarioContainer></ScenarioContainer>
   )
 }
 
