@@ -7,6 +7,10 @@ const useStyle = makeStyles({
   button: {
     border: '2px solid #525B5C',
     borderRadius: 16,
+  },
+  list: {
+    display: 'flex',
+    flexWrap: 'wrap'
   }
 })
 
@@ -32,6 +36,8 @@ export default function ScenarioList(props: Props) {
         <Icon>refresh</Icon>
         update
       </Button>
-      {scenarioList.map(scenario => <ScenarioCard scenario={scenario}/>)}
+      <div className={classes.list}>
+        {scenarioList.map(scenario => <ScenarioCard key={scenario.id} scenario={scenario}/>)}
+      </div>
   </>
 }
