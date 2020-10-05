@@ -1,0 +1,20 @@
+languages: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t docker_test -f dockerfile.dev .
+
+script:
+  - docker run -e CI=true docker_test yarn test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-southeast-1"
+  app: "react-practice"
+  env: "DockerReact.env"
+  bucket_name: ""
+  bucket_path: "react-practice"
+  on:
+    branch: "master"
