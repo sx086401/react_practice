@@ -29,7 +29,7 @@ docker build -f Dockerfile.dev -p .
 Run a docker container. -p for prot mapping, -v for code syncing
 
 ``` shell
-docker run -it -p {local_port}:{container_port} --name {docker_name} -v /app/node_modules -v (pwd):/app  -d{image_id}
+docker run -it -p {local_port}:{container_port} --name {docker_name} -v /app/node_modules -v (pwd):/app  -d {image_id}
 ```
 
 ``` shell
