@@ -8,6 +8,9 @@ import IconEdit from '../../assets/icons/scenario_edit.svg'
 import IconDetail from '../../assets/icons/scenario_detail.svg'
 import IconData from '../../assets/icons/scenario_data.svg'
 import { Scenario } from '../../model/scenario'
+import { ScenarioListMode } from '../ScenarioList/ScenarioList'
+import { useCallback } from 'react'
+import DeleteCheckbox from './DeleteCheckbox'
 
 const useStyle = makeStyles({
   card: {
@@ -38,42 +41,54 @@ const useStyle = makeStyles({
 })
 
 interface Props {
-  scenario: Scenario,
+  scenario: Scenario
+  mode: ScenarioListMode
+  isChecked: boolean
+  onCheck: (scenarioID: number) => void
 }
 
 export default function ScenarioCard(props: Props) {
-  const { scenario } = props
+  const { mode, scenario , isChecked, onCheck} = props
   const classes = useStyle()
 
-  return <Card className={classes.card}>
-    <CardHeader title={
-      <>
-        <Icon>
-          <img src={IconLock} alt="Lock"></img>
-        </Icon>
-        <Icon>
-          <img src={IconRun} alt="Run"></img>{' '}
-        </Icon>
-        <Icon>
-          <img src={IconStop} alt="Stop"></img>
-        </Icon>
-      </>
-    }></CardHeader>
-    <CardMedia component="img" image={scenario.thumbnail_url} className={"thumbnail"}></CardMedia>
-    <CardContent className={"content"}>
-      <div>{scenario.display_name}</div>
-      <div>{dayjs(scenario.updated_at).format('YYYY/MM/DD HH:mm')}</div>
-    </CardContent>
-    <CardActions className="actions">
-      <Icon>
-        <img src={IconEdit} alt="edit"></img>
-      </Icon>
-      <Icon>
-        <img src={IconDetail} alt="detail"></img>
-      </Icon>
-      <Icon>
-        <img src={IconData} alt="edit"></img>
-      </Icon>
-    </CardActions>
+  const onSelect = useCallback(() => {
+    onCheck(scenario.id)
+  }, [onCheck, scenario])
+
+  return (
+    <Card className={classes.card}>
+      {mode === ScenarioListMode.Delete && <DeleteCheckbox onSelect={onSelect} isChecked={isChecked}/>}
+      <CardHeader title={
+        <>
+          <Icon>
+            <img src={IconLock} alt="Lock"></img>
+          </Icon>
+          <Icon>
+            <img src={IconRun} alt="Run"></img>{' '}
+          </Icon>
+          <Icon>
+            <img src={IconStop} alt="Stop"></img>
+          </Icon>
+        </>
+      }></CardHeader>
+      <CardMedia component="img" image={scenario.thumbnail_url} className={"thumbnail"}></CardMedia>
+      <CardContent className={"content"}>
+        <div>{scenario.display_name}</div>
+        <div>{dayjs(scenario.updated_at).format('YYYY/MM/DD HH:mm')}</div>
+      </CardContent>
+      {mode === ScenarioListMode.View && (
+        <CardActions className="actions">
+          <Icon>
+            <img src={IconEdit} alt="edit"></img>
+          </Icon>
+          <Icon>
+            <img src={IconDetail} alt="detail"></img>
+          </Icon>
+          <Icon>
+            <img src={IconData} alt="edit"></img>
+          </Icon>
+        </CardActions>
+      )}
     </Card>
+  )
 }
