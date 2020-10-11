@@ -46,12 +46,12 @@ export default function ScenarioList(props: Props) {
     setCheckedScenarioIDs([...checkedScenarioIDs])
   }, [checkedScenarioIDs])
 
-  const onButtonClick = useCallback(() => {
+  const onRefresh = useCallback(() => {
     onGetScenarioList()
   }, [onGetScenarioList])
 
   return <>
-      <Button className={classes.button} variant="outlined" onClick={onButtonClick}>
+      <Button className={classes.button} variant="outlined" onClick={onRefresh}>
         <Icon>refresh</Icon>
         update
       </Button>
