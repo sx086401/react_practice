@@ -16,7 +16,7 @@ export const getScenarioEpic = (action$: ActionsObservable<AnyAction>) =>
   action$.pipe(
     ofType(scenarioActionTypes.GET_SCENARIO_LIST),
     exhaustMap(() =>
-      ajax.get('http://localhost:8080/v1/scenarios').pipe(
+      ajax.get('/v1/scenarios').pipe(
         map((res: AjaxResponse) => (getScenarioListSuccessAction(res.response))),
         catchError(err => of(getScenarioListFailedAction(err)))
       ),
@@ -27,7 +27,7 @@ export const deleteScenarioEpic = (action$: ActionsObservable<AnyAction>) =>
   action$.pipe(
     ofType(scenarioActionTypes.DELETE_SCENARIO),
     switchMap((action) =>
-      ajax.delete(`http://localhost:8080/v1/scenarios/${action.payload}`).pipe(
+      ajax.delete(`/v1/scenarios/${action.payload}`).pipe(
         map((res: AjaxResponse) => (deleteScenariosSuccessAction(res.response))),
         catchError(err => of(deleteScenariosFailedAction(err)))
       )
