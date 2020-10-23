@@ -5,9 +5,10 @@ import {
   getSensorListFailedAction,
   sensorActionTypes, createSensorSuccessAction, createSensorFailedAction
 } from '../../reducer/sensor/sensorActions'
-import { catchError, exhaustMap, map } from 'rxjs/operators'
+import { catchError, exhaustMap, map, tap } from 'rxjs/operators'
 import { of } from 'rxjs'
 import { ajax, AjaxResponse } from 'rxjs/ajax'
+import { apiResponse } from '../utils'
 
 export const getSensorListEpic = (action$: ActionsObservable<AnyAction>) =>
   action$.pipe(
@@ -24,7 +25,9 @@ export const createSensorEpic = (action$: ActionsObservable<AnyAction>) =>
   action$.pipe(
     ofType(sensorActionTypes.CREATE_SENSOR),
     exhaustMap(({ payload }) =>
-      ajax.post('/v1/sensors', payload, { 'Content-Type': 'application/json' } ).pipe(
+      ajax.post('/v1/sensors', payload, { 'Content-Type': 'application/json' } )
+      .pipe(
+        tap(() => apiResponse.next(sensorActionTypes.CREATE_SENSOR_SUCCESS)),
         map(() => (createSensorSuccessAction())),
         catchError((err) => of(createSensorFailedAction(err)))
       )

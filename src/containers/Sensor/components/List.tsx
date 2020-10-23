@@ -1,9 +1,8 @@
 import { Button, Dialog, DialogContent, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
-import React, { useEffect } from 'react'
-import { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import  Form  from './Form'
 import { Sensor, SensorRequestBody } from '../../../model/sensor'
-import { useCallback } from 'react'
+import { apiResponse } from '../../../epics/utils'
 
 interface Props {
   sensorList: Sensor[]
@@ -14,15 +13,22 @@ interface Props {
 export default function List(props: Props) {
   const { sensorList, onGetSensorList, onCreateSensor} = props
   const [showForm, toggleForm] = useState(false)
-
   const tableHead: Array<keyof Sensor> = ['id', 'display_name', 'type', 'extra']
 
   useEffect(() => {
     onGetSensorList(0, 10)
   }, [onGetSensorList])
 
+  useEffect(() => {
+    const subscription = apiResponse.subscribe({
+      next: () => toggleForm(prev => !prev)
+    })
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
   const beforeSubmit = useCallback((formData: SensorRequestBody) => {
-      toggleForm(prev => !prev)
       onCreateSensor(formData)
     },
     [onCreateSensor],

@@ -1,4 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { apiResponse } from '../../../epics/utils'
+import { Subscription } from 'rxjs'
 import { SensorRequestBody } from '../../../model/sensor'
 
 interface Props {
@@ -12,9 +15,21 @@ export default function Form(props: Props) {
     type: 'A',
     extra: '',
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const subscription = useRef<Subscription | null>(null)
+
+  useEffect(() => {
+    subscription.current = apiResponse.subscribe({
+      next: () => (setIsLoading(false))
+    })
+    return () => {
+      subscription.current!.unsubscribe()
+    }
+  }, [])
 
   const beforeSubmit = (e: FormEvent) => {
-    console.log(e)
+    e.preventDefault()
+    setIsLoading(true)
     onSubmit(formData)
   }
 
@@ -22,6 +37,7 @@ export default function Form(props: Props) {
     <label>Name</label>
     <div>
       <input
+        disabled={isLoading}
         value={formData.display_name}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({...formData, display_name: e.target.value})}
       />
@@ -33,6 +49,7 @@ export default function Form(props: Props) {
     <div>
       <label>Extra</label>
       <input
+        disabled={isLoading}
         value={formData.extra}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({...formData, extra: e.target.value})}
       />
