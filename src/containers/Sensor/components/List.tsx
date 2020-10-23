@@ -14,6 +14,7 @@ export default function List(props: Props) {
   useEffect(() => {
     onGetSensorList(0, 10)
   }, [onGetSensorList])
+
   return <>
   <Table>
     <TableHead>
