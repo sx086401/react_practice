@@ -3,7 +3,7 @@ import { ActionsObservable, ofType } from 'redux-observable'
 import {
   getSensorListSuccessAction,
   getSensorListFailedAction,
-  sensorActionTypes
+  sensorActionTypes, createSensorSuccessAction, createSensorFailedAction
 } from '../../reducer/sensor/sensorActions'
 import { catchError, exhaustMap, map } from 'rxjs/operators'
 import { of } from 'rxjs'
@@ -20,4 +20,15 @@ export const getSensorListEpic = (action$: ActionsObservable<AnyAction>) =>
     ),
   )
 
-export default [getSensorListEpic]
+export const createSensorEpic = (action$: ActionsObservable<AnyAction>) =>
+  action$.pipe(
+    ofType(sensorActionTypes.CREATE_SENSOR),
+    exhaustMap(({ payload }) =>
+      ajax.post('/v1/sensors', payload, { 'Content-Type': 'application/json' } ).pipe(
+        map(() => (createSensorSuccessAction())),
+        catchError((err) => of(createSensorFailedAction(err)))
+      )
+    ),
+  )
+
+export default [getSensorListEpic, createSensorEpic]
