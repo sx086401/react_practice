@@ -1,5 +1,5 @@
 export interface Sensor {
-  id: string
+  id: number
   display_name: string
   type: 'A' | 'B' | 'C'
   extra?: string

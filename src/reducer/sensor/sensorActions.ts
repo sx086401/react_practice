@@ -9,8 +9,9 @@ export const sensorActionTypes = {
   CREATE_SENSOR_FAILED: '@sensor/CREATE_SENSOR_FAILED',
 }
 
-export const getSensorListAction = () => ({
+export const getSensorListAction = (payload: {skip: number, limit: number}) => ({
   type: sensorActionTypes.GET_SENSOR_LIST,
+  payload,
 })
 
 export type SensorList = Sensor[]

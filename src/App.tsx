@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import configureStore from './store/configureStore'
 import ScenarioContainer from './containers/ScenarioContainer/ScenarioContainer'
 import { HashRouter, Route, Switch } from 'react-router-dom'
-import Sensor from './containers/ScenarioContainer/Sensor/Sensor'
+import Sensor from './containers/Sensor/Sensor'
 
 const store = configureStore()
 

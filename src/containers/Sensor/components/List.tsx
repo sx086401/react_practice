@@ -1,23 +1,19 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
-import React from 'react'
-import { Sensor } from '../../../../model/sensor'
+import React, { useEffect } from 'react'
+import { Sensor } from '../../../model/sensor'
 
-export default function List() {
+interface Props {
+  sensorList: Sensor[]
+  onGetSensorList: (skip: number, limit: number) => void
+}
+
+export default function List(props: Props) {
+  const { sensorList, onGetSensorList} = props
   const tableHead: Array<keyof Sensor> = ['id', 'display_name', 'type', 'extra']
-  const sensorList: Sensor[] = [
-    {
-      id: '1',
-      display_name: 'sensor 1',
-      type: 'A',
-    },
-    {
-      id: '2',
-      display_name: 'sensor 2',
-      type: 'B',
-      extra: 'optional field',
-    }
-  ]
 
+  useEffect(() => {
+    onGetSensorList(0, 10)
+  }, [onGetSensorList])
   return <>
   <Table>
     <TableHead>
