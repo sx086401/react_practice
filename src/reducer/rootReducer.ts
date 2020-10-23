@@ -1,14 +1,18 @@
 import { combineReducers } from 'redux'
 import scenarioReducer, { scenarioInitState, ScenarioState } from './scenario/scenarioReducer'
+import sensorReducer, { sensorInitState, sensorState } from './sensor/sensorReducer'
 
 export interface StoreState {
   scenario: ScenarioState
+  sensor: sensorState
 }
 
 export const initStoreState: StoreState = {
-  scenario: scenarioInitState
+  scenario: scenarioInitState,
+  sensor: sensorInitState,
 }
 
 export default combineReducers({
-  scenario: scenarioReducer
+  scenario: scenarioReducer,
+  sensor: sensorReducer,
 })

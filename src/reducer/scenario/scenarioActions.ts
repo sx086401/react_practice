@@ -15,6 +15,7 @@ export const getScenarioListAction = () => ({
 })
 
 export type ScenarioList = Scenario[]
+
 export const getScenarioListSuccessAction = (payload: Scenario[]) => ({
   type: scenarioActionTypes.GET_SCENARIO_LIST_SUCCESS,
   payload,
