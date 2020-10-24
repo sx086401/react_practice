@@ -9,6 +9,10 @@ interface Props {
   onSubmit: (formData: SensorRequestBody) => void
 }
 
+interface FormErrors {
+  display_name: string | null
+}
+
 export default function Form(props: Props) {
   const { onSubmit } = props
   const [formData, setFormData] = useState<SensorRequestBody>({
@@ -16,6 +20,9 @@ export default function Form(props: Props) {
     type: 'A',
     extra: '',
   })
+  const [errors, setErrors] = useState<FormErrors>(
+    { display_name: null }
+  )
   const [isLoading, setIsLoading] = useState(false)
   const subscription = useRef<Subscription | null>(null)
 
@@ -31,25 +38,56 @@ export default function Form(props: Props) {
 
   const beforeSubmit = (e: FormEvent) => {
     e.preventDefault()
+    if (formData.display_name === '') {
+      setErrors({ display_name: 'Required' })
+    } else if (formData.display_name.length > 6) {
+      setErrors({ display_name: 'Exceed maximum length.' })
+    }
     setIsLoading(true)
     onSubmit(formData)
   }
 
+  const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+    const newDisplayName = e.target.value
+    const newErrors: FormErrors = { ...errors, display_name: null }
+
+    if (formData.display_name === '') {
+      newErrors.display_name = 'Required'
+    } else if (newDisplayName.length > 6) {
+      newErrors.display_name = 'Exceed maximum length.'
+    }
+    setFormData({ ...formData, display_name: e.target.value })
+    setErrors(newErrors)
+  }
+
+  const onBlurName = () => {
+    if (formData.display_name === '') {
+      setErrors({
+        ...errors,
+        display_name: 'Required'
+      })
+    }
+  }
+
   return <form onSubmit={beforeSubmit}>
-    <label>Name</label>
+    <label>Name: </label>
     <div>
       <input
         disabled={isLoading}
         value={formData.display_name}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({...formData, display_name: e.target.value})}
+        onChange={onChangeName}
+        onBlur={onBlurName}
       />
     </div>
+    {errors.display_name && <div style={{ color: 'red' }}>{errors.display_name}</div>}
+    <br/>
     <div>
-      <label>Type</label>
+      <label>Type: </label>
       <span>A</span>
     </div>
+    <br/>
     <div>
-      <label>Extra</label>
+      <label>Extra: </label>
       <input
         disabled={isLoading}
         value={formData.extra}
