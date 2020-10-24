@@ -27,7 +27,7 @@ export const createSensorEpic = (action$: ActionsObservable<AnyAction>) =>
     exhaustMap(({ payload }) =>
       ajax.post('/v1/sensors', payload, { 'Content-Type': 'application/json' } )
       .pipe(
-        tap(() => apiResponse.next(sensorActionTypes.CREATE_SENSOR_SUCCESS)),
+        tap(() => apiResponse.success(sensorActionTypes.CREATE_SENSOR_SUCCESS)),
         map(() => (createSensorSuccessAction())),
         catchError((err) => of(createSensorFailedAction(err)))
       )

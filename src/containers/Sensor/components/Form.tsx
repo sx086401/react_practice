@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { apiResponse } from '../../../epics/utils'
 import { Subscription } from 'rxjs'
 import { SensorRequestBody } from '../../../model/sensor'
+import { sensorActionTypes } from '../../../reducer/sensor/sensorActions'
 
 interface Props {
   onSubmit: (formData: SensorRequestBody) => void
@@ -19,9 +20,10 @@ export default function Form(props: Props) {
   const subscription = useRef<Subscription | null>(null)
 
   useEffect(() => {
-    subscription.current = apiResponse.subscribe({
-      next: () => (setIsLoading(false))
-    })
+    subscription.current = apiResponse.subscribe(
+      { nextActions: [sensorActionTypes.CREATE_SENSOR_SUCCESS]},
+      { next: () => (setIsLoading(false) )}
+    )
     return () => {
       subscription.current!.unsubscribe()
     }

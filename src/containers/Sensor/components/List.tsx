@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import  Form  from './Form'
 import { Sensor, SensorRequestBody } from '../../../model/sensor'
 import { apiResponse } from '../../../epics/utils'
+import { sensorActionTypes } from '../../../reducer/sensor/sensorActions'
 
 interface Props {
   sensorList: Sensor[]
@@ -20,9 +21,10 @@ export default function List(props: Props) {
   }, [onGetSensorList])
 
   useEffect(() => {
-    const subscription = apiResponse.subscribe({
-      next: () => toggleForm(prev => !prev)
-    })
+    const subscription = apiResponse.subscribe(
+      { nextActions: [sensorActionTypes.CREATE_SENSOR_SUCCESS]},
+      { next: () => toggleForm(prev => !prev) }
+    )
     return () => {
       subscription.unsubscribe()
     }
